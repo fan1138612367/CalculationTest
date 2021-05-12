@@ -4,7 +4,7 @@
     <string name="app_name">口算测试</string>
     <string name="buttonSubmit">确定</string>
     <string name="button_back_to_title">返回</string>
-    <string name="current_score">得分：</string>
+    <string name="current_score">得分：%d</string>
     <string name="dialog_negative_message">取消</string>
     <string name="dialog_positive_message">确定</string>
     <string name="win_score_message">创造新记录：%d</string>
