@@ -1,0 +1,41 @@
+package com.example.calculationtest
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import com.example.calculationtest.databinding.FragmentWinBinding
+
+class WinFragment : Fragment() {
+    private var _binding: FragmentWinBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_win, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val myViewModel by activityViewModels<MyViewModel>()
+        binding.myViewModel = myViewModel
+        binding.lifecycleOwner = requireActivity()
+        binding.button10.setOnClickListener {
+            it.findNavController().navigate(R.id.action_winFragment_to_titleFragment)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
