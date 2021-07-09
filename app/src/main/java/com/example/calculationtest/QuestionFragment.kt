@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.calculationtest.databinding.FragmentQuestionBinding
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 
 class QuestionFragment : Fragment() {
     private var _binding: FragmentQuestionBinding? = null
@@ -50,8 +49,15 @@ class QuestionFragment : Fragment() {
         val myViewModel by activityViewModels<MyViewModel>()
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
-        myViewModel.currentScore.value = 0
-        myViewModel.generator()
+
+        if (savedInstanceState == null) {
+            myViewModel.apply {
+                currentScore.value = 0
+                generator()
+                inputText.value = getString(R.string.input_indicator)
+                builder.value!!.setLength(0)
+            }
+        }
 
         val buttonList = listOf(
             binding.button0,
@@ -65,18 +71,18 @@ class QuestionFragment : Fragment() {
             binding.button8,
             binding.button9
         )
-        val builder = StringBuilder()
+        val builder = myViewModel.builder.value!!
         buttonList.forEach { button ->
             button.setOnClickListener {
                 if (builder.length < 2) {
                     builder.append(button.text)
-                    binding.textView5.text = builder.toString()
+                    myViewModel.inputText.value = builder.toString()
                 }
             }
         }
         binding.buttonClear.setOnClickListener {
             builder.setLength(0)
-            binding.textView5.setText(R.string.input_indicator)
+            myViewModel.inputText.value = getString(R.string.input_indicator)
         }
         binding.buttonSubmit.setOnClickListener {
             if (builder.isEmpty()) {
@@ -85,7 +91,7 @@ class QuestionFragment : Fragment() {
             if (builder.toString().toInt() == myViewModel.answer.value) {
                 myViewModel.answerCorrect()
                 builder.setLength(0)
-                binding.textView5.setText(R.string.answer_correct_message)
+                myViewModel.inputText.value = getString(R.string.answer_correct_message)
             } else {
                 if (myViewModel.winFlag) {
                     findNavController().navigate(R.id.action_questionFragment_to_winFragment)

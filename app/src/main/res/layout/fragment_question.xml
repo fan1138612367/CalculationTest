@@ -43,12 +43,13 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/input_indicator"
+            android:text="@{myViewModel.inputText}"
             android:textSize="@dimen/mid_font"
             app:layout_constraintBottom_toTopOf="@+id/guideline11"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline10" />
+            app:layout_constraintTop_toTopOf="@+id/guideline10"
+            tools:text="@string/input_indicator" />
 
         <Button
             android:id="@+id/button1"

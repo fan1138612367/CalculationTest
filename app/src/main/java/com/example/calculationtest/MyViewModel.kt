@@ -22,6 +22,8 @@ class MyViewModel(application: Application, savedStateHandle: SavedStateHandle) 
                 set("key_answer", 0)
                 set("key_operator", "+")
                 set("key_current_score", 0)
+                set("key_input_text", String())
+                set("key_builder", StringBuilder())
             }
         }
         handle = savedStateHandle
@@ -33,13 +35,15 @@ class MyViewModel(application: Application, savedStateHandle: SavedStateHandle) 
     val answer: MutableLiveData<Int> = handle.getLiveData("key_answer")
     val operator: MutableLiveData<String> = handle.getLiveData("key_operator")
     val currentScore: MutableLiveData<Int> = handle.getLiveData("key_current_score")
+    val inputText: MutableLiveData<String> = handle.getLiveData("key_input_text")
+    val builder: MutableLiveData<StringBuilder> = handle.getLiveData("key_builder")
 
     fun generator() {
         val x = (0..20).random()
         val y = (0..20).random()
         if (x % 2 == 0) {
             operator.value = "+"
-            //加法大数作answer
+            //加法，大数作answer
             if (x > y) {
                 leftNumber.value = y
                 rightNumber.value = x - y
@@ -51,7 +55,7 @@ class MyViewModel(application: Application, savedStateHandle: SavedStateHandle) 
             }
         } else {
             operator.value = "-"
-            //减法大数作left
+            //减法，大数作left
             if (x > y) {
                 leftNumber.value = x
                 rightNumber.value = y
