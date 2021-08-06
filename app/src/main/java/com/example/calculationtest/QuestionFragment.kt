@@ -1,6 +1,5 @@
 package com.example.calculationtest
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.calculationtest.databinding.FragmentQuestionBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 class QuestionFragment : Fragment() {
@@ -21,7 +21,7 @@ class QuestionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.dialog_quit_title)
                 .setPositiveButton(R.string.dialog_positive_message) { _, _ ->
                     findNavController().navigateUp()
@@ -29,7 +29,6 @@ class QuestionFragment : Fragment() {
                 .setNegativeButton(R.string.dialog_negative_message) { dialog, _ ->
                     dialog.cancel()
                 }
-                .create()
                 .show()
         }
     }
