@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 class QuestionFragment : Fragment() {
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
+    private val myViewModel by activityViewModels<MyViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,10 @@ class QuestionFragment : Fragment() {
                     dialog.cancel()
                 }
                 .show()
+        }
+        if (savedInstanceState == null) {
+            myViewModel.generator()
+            myViewModel.currentScore.postValue(0)
         }
     }
 
@@ -45,18 +50,8 @@ class QuestionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myViewModel by activityViewModels<MyViewModel>()
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
-
-        if (savedInstanceState == null) {
-            myViewModel.apply {
-                currentScore.value = 0
-                generator()
-                inputText.value = getString(R.string.input_indicator)
-                builder.value!!.setLength(0)
-            }
-        }
 
         val buttonList = listOf(
             binding.button0,
@@ -70,34 +65,23 @@ class QuestionFragment : Fragment() {
             binding.button8,
             binding.button9
         )
-        val builder = myViewModel.builder.value!!
         buttonList.forEach { button ->
             button.setOnClickListener {
-                if (builder.length < 2) {
-                    builder.append(button.text)
-                    myViewModel.inputText.value = builder.toString()
-                }
+                myViewModel.inputText(button.text)
             }
-        }
-        binding.buttonClear.setOnClickListener {
-            builder.setLength(0)
-            myViewModel.inputText.value = getString(R.string.input_indicator)
         }
         binding.buttonSubmit.setOnClickListener {
-            if (builder.isEmpty()) {
-                builder.append(-1)
-            }
-            if (builder.toString().toInt() == myViewModel.answer.value) {
-                myViewModel.answerCorrect()
-                builder.setLength(0)
-                myViewModel.inputText.value = getString(R.string.answer_correct_message)
-            } else {
-                if (myViewModel.winFlag) {
-                    findNavController().navigate(R.id.action_questionFragment_to_winFragment)
-                    lifecycleScope.launch { myViewModel.save() }
-                    myViewModel.winFlag = false
+            if (myViewModel.inputText.value!!.length <= 2) {
+                if (myViewModel.inputText.value!!.toInt() == myViewModel.answer.value) {
+                    myViewModel.answerCorrect()
                 } else {
-                    findNavController().navigate(R.id.action_questionFragment_to_loseFragment)
+                    if (myViewModel.winFlag) {
+                        findNavController().navigate(R.id.action_questionFragment_to_winFragment)
+                        viewLifecycleOwner.lifecycleScope.launch { myViewModel.save() }
+                        myViewModel.winFlag = false
+                    } else {
+                        findNavController().navigate(R.id.action_questionFragment_to_loseFragment)
+                    }
                 }
             }
         }

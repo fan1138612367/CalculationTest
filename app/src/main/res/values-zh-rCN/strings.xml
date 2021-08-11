@@ -20,4 +20,5 @@
     <string name="win_message">挑战成功！</string>
     <string name="buttonSubmit">确定</string>
     <string name="input_indicator">请开始答题：</string>
+    <string name="toast_quit">再按一次返回键退出</string>
 </resources>

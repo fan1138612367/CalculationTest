@@ -29,8 +29,8 @@ class LoseFragment : Fragment() {
         val myViewModel by activityViewModels<MyViewModel>()
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
-        binding.button11.setOnClickListener {
-            it.findNavController().navigate(R.id.action_loseFragment_to_titleFragment)
+        binding.buttonBack.setOnClickListener {
+            it.findNavController().navigateUp()
         }
     }
 

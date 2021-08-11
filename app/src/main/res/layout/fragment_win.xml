@@ -30,7 +30,6 @@
             app:layout_constraintTop_toTopOf="@+id/guideline16" />
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/win_message"
@@ -41,7 +40,6 @@
             app:layout_constraintTop_toTopOf="@+id/guideline17" />
 
         <TextView
-            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{@string/win_score_message(myViewModel.highScore)}"
@@ -53,7 +51,7 @@
             tools:text="New Record:20" />
 
         <Button
-            android:id="@+id/button10"
+            android:id="@+id/buttonBack"
             style="@style/Widget.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

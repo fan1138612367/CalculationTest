@@ -29,8 +29,8 @@ class WinFragment : Fragment() {
         val myViewModel by activityViewModels<MyViewModel>()
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
-        binding.button10.setOnClickListener {
-            it.findNavController().navigate(R.id.action_winFragment_to_titleFragment)
+        binding.buttonBack.setOnClickListener {
+            it.findNavController().navigateUp()
         }
     }
 
