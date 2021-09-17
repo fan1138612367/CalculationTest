@@ -5,32 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.calculationtest.databinding.FragmentTitleBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class TitleFragment : Fragment() {
     private var _binding: FragmentTitleBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            Toast.makeText(requireContext(), getString(R.string.toast_quit), Toast.LENGTH_SHORT)
-                .show()
-            isEnabled = false
-            lifecycleScope.launch {
-                delay(1500)
-                isEnabled = true
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +26,7 @@ class TitleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myViewModel by activityViewModels<MyViewModel>()
+        val myViewModel by navGraphViewModels<MyViewModel>(R.id.navigation)
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
         binding.button.setOnClickListener {

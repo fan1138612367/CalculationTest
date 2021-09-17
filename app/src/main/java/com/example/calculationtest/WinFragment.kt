@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.calculationtest.databinding.FragmentWinBinding
 
 class WinFragment : Fragment() {
@@ -26,7 +26,7 @@ class WinFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myViewModel by activityViewModels<MyViewModel>()
+        val myViewModel by navGraphViewModels<MyViewModel>(R.id.navigation)
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
         binding.buttonBack.setOnClickListener {

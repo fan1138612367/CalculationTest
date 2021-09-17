@@ -5,33 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.calculationtest.databinding.FragmentQuestionBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 
 class QuestionFragment : Fragment() {
     private var _binding: FragmentQuestionBinding? = null
     private val binding get() = _binding!!
-    private val myViewModel by activityViewModels<MyViewModel>()
+    private val myViewModel by navGraphViewModels<MyViewModel>(R.id.navigation)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.dialog_quit_title)
-                .setPositiveButton(R.string.dialog_positive_message) { _, _ ->
-                    findNavController().navigateUp()
-                }
-                .setNegativeButton(R.string.dialog_negative_message) { dialog, _ ->
-                    dialog.cancel()
-                }
-                .show()
-        }
         if (savedInstanceState == null) {
             myViewModel.generator()
             myViewModel.currentScore.postValue(0)
