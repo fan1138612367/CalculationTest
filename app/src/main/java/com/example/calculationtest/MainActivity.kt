@@ -4,20 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.calculationtest.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navController: NavController
+    private val navController by lazy { binding.fragmentContainerView.getFragment<NavHostFragment>().navController }
+    private val binding: ActivityMainBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.activity_main)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding.lifecycleOwner = this
 
         onBackPressedDispatcher.addCallback(this) {
             if (navController.currentDestination?.id == R.id.titleFragment) {
@@ -40,8 +44,6 @@ class MainActivity : AppCompatActivity() {
                 onSupportNavigateUp()
             }
         }
-        navController =
-            (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).navController
         setupActionBarWithNavController(navController)
     }
 

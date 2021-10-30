@@ -13,6 +13,7 @@ import com.example.calculationtest.databinding.FragmentLoseBinding
 class LoseFragment : Fragment() {
     private var _binding: FragmentLoseBinding? = null
     private val binding get() = _binding!!
+    private val myViewModel by navGraphViewModels<MyViewModel>(R.id.navigation)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +27,6 @@ class LoseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myViewModel by navGraphViewModels<MyViewModel>(R.id.navigation)
         binding.myViewModel = myViewModel
         binding.lifecycleOwner = requireActivity()
         binding.buttonBack.setOnClickListener {
