@@ -30,11 +30,6 @@ class MainActivity : AppCompatActivity() {
                     getString(R.string.toast_quit),
                     Toast.LENGTH_SHORT
                 ).show()
-                Toast.makeText(
-                    this@MainActivity,
-                    getString(R.string.toast_quit),
-                    Toast.LENGTH_SHORT
-                ).show()
                 isEnabled = false
                 lifecycleScope.launch {
                     delay(1500)

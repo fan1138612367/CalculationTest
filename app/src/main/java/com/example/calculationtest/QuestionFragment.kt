@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.calculationtest.databinding.FragmentQuestionBinding
-import kotlinx.coroutines.launch
 
 class QuestionFragment : Fragment() {
     private var _binding: FragmentQuestionBinding? = null
@@ -64,7 +62,7 @@ class QuestionFragment : Fragment() {
                 } else {
                     if (myViewModel.winFlag) {
                         findNavController().navigate(R.id.action_questionFragment_to_winFragment)
-                        viewLifecycleOwner.lifecycleScope.launch { myViewModel.save() }
+                        myViewModel.save()
                         myViewModel.winFlag = false
                     } else {
                         findNavController().navigate(R.id.action_questionFragment_to_loseFragment)

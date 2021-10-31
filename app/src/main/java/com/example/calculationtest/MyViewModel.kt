@@ -2,13 +2,19 @@ package com.example.calculationtest
 
 import android.app.Application
 import android.content.Context
-import androidx.core.content.edit
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore("SAVE_SHP_DATA_NAME")
 
 class MyViewModel(application: Application, private val savedStateHandle: SavedStateHandle) :
     AndroidViewModel(application) {
@@ -26,14 +32,16 @@ class MyViewModel(application: Application, private val savedStateHandle: SavedS
     private val _inputText: MutableLiveData<String> by lazy { savedStateHandle.getLiveData("KEY_INPUT_TEXT") }
     val inputText: LiveData<String> get() = _inputText
     var winFlag = false
-    private val sharedPreferences by lazy {
-        application.getSharedPreferences("SAVE_SHP_DATA_NAME", Context.MODE_PRIVATE)
-    }
+    private val dataStore by lazy { application.dataStore }
 
     init {
         if (!savedStateHandle.contains("KEY_HIGH_SCORE")) {
             with(savedStateHandle) {
-                set("KEY_HIGH_SCORE", sharedPreferences.getInt("KEY_HIGH_SCORE", 0))
+                runBlocking(Dispatchers.IO) {
+                    set("KEY_HIGH_SCORE", dataStore.data.map {
+                        it[intPreferencesKey("KEY_HIGH_SCORE")] ?: 0
+                    }.first())
+                }
                 set("KEY_LEFT_NUMBER", 0)
                 set("KEY_RIGHT_NUMBER", 0)
                 set("KEY_ANSWER", 0)
@@ -93,10 +101,10 @@ class MyViewModel(application: Application, private val savedStateHandle: SavedS
         _inputText.value = getApplication<Application>().getString(R.string.answer_correct_message)
     }
 
-    suspend fun save() {
-        withContext(Dispatchers.IO) {
-            sharedPreferences.edit {
-                putInt("KEY_HIGH_SCORE", highScore.value!!)
+    fun save() {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStore.edit {
+                it[intPreferencesKey("KEY_HIGH_SCORE")] = highScore.value!!
             }
         }
     }
